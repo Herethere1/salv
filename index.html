@@ -3,18 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real-time News Updates from El Salvador</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>El Salvador News</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        #news-container {
+            margin-top: 20px;
+        }
+        .news-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .news-item h2 {
+            margin-bottom: 5px;
+        }
+        .news-item p {
+            color: #666;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Real-time News Updates from El Salvador</h1>
-        <div id="news-list">
-            <!-- News articles will be dynamically added here -->
-        </div>
+        <h1>Latest News from El Salvador</h1>
+        <div id="news-container"></div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="script.js"></script>
+    <script>
+        async function fetchNews() {
+            const apiKey = 'c55ae78edfbb4fa2bbab93187989f594'; // Replace with your actual NewsAPI key
+            const url = `https://newsapi.org/v2/top-headlines?country=sv&apiKey=${apiKey}`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                displayNews(data.articles);
+            } catch (error) {
+                console.error('Error fetching news:', error);
+            }
+        }
+
+        function displayNews(articles) {
+            const newsContainer = document.getElementById('news-container');
+            articles.forEach(article => {
+                const newsItem = document.createElement('div');
+                newsItem.classList.add('news-item');
+                newsItem.innerHTML = `
+                    <h2>${article.title}</h2>
+                    <p>${article.description}</p>
+                    <a href="${article.url}" target="_blank">Read more</a>
+                `;
+                newsContainer.appendChild(newsItem);
+            });
+        }
+
+        fetchNews();
+    </script>
 </body>
 </html>
